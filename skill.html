@@ -1,0 +1,3358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap - Exchange Your Skills</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a6cf7;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --busy: #ff6b6b;
+            --available: #51cf66;
+            --away: #ffd43b;
+            --teacher: #8a2be2;
+            --student: #20c997;
+            --beginner: #20c997;
+            --intermediate: #fd7e14;
+            --advanced: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav a:hover, nav a.active {
+            color: var(--primary);
+        }
+        
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #4a6cf7 0%, #6a11cb 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .search-box button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(74, 108, 247, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            color: var(--primary);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        /* Skills Section */
+        .skills {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .skills-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .filter-btn {
+            padding: 8px 20px;
+            background: var(--light);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .skill-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .skill-image {
+            height: 180px;
+            background: linear-gradient(45deg, #4a6cf7, #6a11cb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+            position: relative;
+        }
+        
+        .user-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        .status-available {
+            background-color: var(--available);
+        }
+        
+        .status-busy {
+            background-color: var(--busy);
+        }
+        
+        .status-away {
+            background-color: var(--away);
+        }
+        
+        .skill-level {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .level-beginner {
+            background-color: var(--beginner);
+        }
+        
+        .level-intermediate {
+            background-color: var(--intermediate);
+        }
+        
+        .level-advanced {
+            background-color: var(--advanced);
+        }
+        
+        .skill-content {
+            padding: 20px;
+        }
+        
+        .skill-content h3 {
+            margin-bottom: 10px;
+        }
+        
+        .skill-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--secondary);
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .progress-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .progress-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        
+        .progress-card h3 {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--secondary);
+        }
+        
+        .achievements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .achievement {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .achievement.unlocked {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+        
+        .achievement i {
+            color: var(--warning);
+        }
+        
+        .achievement.unlocked i {
+            color: var(--success);
+        }
+        
+        /* Progress Input Styles */
+        .progress-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .progress-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-size: 14px;
+        }
+        
+        .progress-input-btn {
+            padding: 8px 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .progress-input-btn:hover {
+            background: #3a5ce5;
+        }
+        
+        /* Scheduler */
+        .scheduler {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .scheduler-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+        
+        .calendar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        
+        .calendar-day {
+            text-align: center;
+            padding: 8px 5px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        .calendar-date {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .calendar-date:hover {
+            background: #f0f2f5;
+        }
+        
+        .calendar-date.selected {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .calendar-date.available {
+            background: rgba(81, 207, 102, 0.1);
+            color: var(--available);
+        }
+        
+        .calendar-date.busy {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--busy);
+        }
+        
+        .calendar-date.past {
+            background: #f8f9fa;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .time-slot {
+            padding: 10px;
+            background: var(--light);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .time-slot.selected {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .time-slot.busy {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--busy);
+        }
+        
+        .time-slot.past {
+            background: #f8f9fa;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .sessions-list {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .session-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .session-item:last-child {
+            border-bottom: none;
+        }
+        
+        .session-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .session-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .session-status {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-top: 5px;
+        }
+        
+        .status-completed {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-upcoming {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        /* Status Selector */
+        .status-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .status-option {
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .status-option.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .status-available-option {
+            background: rgba(81, 207, 102, 0.2);
+            color: var(--available);
+        }
+        
+        .status-busy-option {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--busy);
+        }
+        
+        .status-away-option {
+            background: rgba(255, 212, 59, 0.2);
+            color: var(--away);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-size: 16px;
+        }
+        
+        /* Video Call Modal */
+        .video-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 20px;
+            background: #1a1a1a;
+        }
+        
+        .video-feed {
+            background: #333;
+            height: 300px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-direction: column;
+        }
+        
+        .video-controls {
+            padding: 15px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--light);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .control-btn.end-call {
+            background: var(--danger);
+            color: white;
+        }
+        
+        /* Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+        
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: none;
+            flex-direction: column;
+        }
+        
+        .chatbot-header {
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius) var(--radius) 0 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+        
+        .bot-message {
+            background: #f0f2f5;
+            align-self: flex-start;
+        }
+        
+        .user-message {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .chatbot-input {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            padding: 80px 0;
+            display: none;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(74, 108, 247, 0.1);
+            color: var(--primary);
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-card i {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .stat-card h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        /* Dashboard Content Sections */
+        .dashboard-content {
+            display: none;
+        }
+        
+        .dashboard-content.active {
+            display: block;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: #bbb;
+            text-decoration: none;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .scheduler-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Connection Status */
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .connection-status.error {
+            background: var(--danger);
+        }
+        
+        /* Reminder Notification */
+        .reminder-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--warning);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Connection Status Notification -->
+    <div class="connection-status" id="connection-status">
+        <i class="fas fa-check-circle"></i>
+        <span id="connection-message">Connected successfully!</span>
+    </div>
+
+    <!-- Reminder Notification -->
+    <div class="reminder-notification" id="reminder-notification">
+        <i class="fas fa-bell"></i>
+        <span id="reminder-message">You have an upcoming session!</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-exchange-alt"></i>
+                <span>SkillSwap</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#scheduler">Schedule</a></li>
+                    <li><a href="#progress">Progress</a></li>
+                    <li><a href="#dashboard" id="dashboard-link" style="display: none;">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="user-info" id="user-info" style="display: none;">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <div>
+                    <div id="user-name">User</div>
+                    <div id="user-role">Student</div>
+                </div>
+                <button class="btn btn-outline" id="logout-btn">Logout</button>
+            </div>
+            <div class="auth-buttons" id="auth-buttons">
+                <button class="btn btn-outline" id="login-btn">Log In</button>
+                <button class="btn btn-primary" id="signup-btn">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Exchange Skills, Grow Together</h1>
+            <p>Connect with people who have the skills you need and share your expertise in return. No money needed, just mutual learning.</p>
+            <div class="search-box">
+                <input type="text" placeholder="Search for skills (e.g. dancing, guitar, coding...)" id="skill-search">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>How SkillSwap Works</h2>
+                <p>Our platform makes skill exchange simple, effective, and rewarding for everyone involved.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Find Skills</h3>
+                    <p>Search for specific skills you want to learn or browse categories to discover new interests.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Connect</h3>
+                    <p>Find partners whose skills match your needs and whose needs match your skills.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Video Calls</h3>
+                    <p>Use our integrated video calling to learn from each other in real-time, no matter where you are.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Schedule Sessions</h3>
+                    <p>Coordinate your availability and set up learning sessions that work for both parties.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Progress Tracking</h3>
+                    <p>Monitor your learning journey with detailed progress tracking and achievement badges.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Skill Validation</h3>
+                    <p>Get your skills certified by the community and build a verified skill portfolio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <div class="container">
+            <div class="section-title">
+                <h2>Popular Skills to Exchange</h2>
+                <p>Discover a wide range of skills available for exchange in our community.</p>
+            </div>
+            <div class="skills-filter">
+                <button class="filter-btn active" data-category="all">All Skills</button>
+                <button class="filter-btn" data-category="technology">Technology</button>
+                <button class="filter-btn" data-category="creative">Creative</button>
+                <button class="filter-btn" data-category="languages">Languages</button>
+                <button class="filter-btn" data-category="business">Business</button>
+                <button class="filter-btn" data-category="lifestyle">Lifestyle</button>
+                <button class="filter-btn" data-level="all">All Levels</button>
+                <button class="filter-btn" data-level="beginner">Beginner</button>
+                <button class="filter-btn" data-level="intermediate">Intermediate</button>
+                <button class="filter-btn" data-level="advanced">Advanced</button>
+            </div>
+            <div class="skills-grid" id="skills-container">
+                <!-- Skills will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Section -->
+    <section class="progress-section" id="progress">
+        <div class="container">
+            <div class="section-title">
+                <h2>Track Your Learning Progress</h2>
+                <p>Monitor your skill development and celebrate your achievements along the way.</p>
+            </div>
+            <div class="progress-container">
+                <div class="progress-card">
+                    <h3><i class="fas fa-chart-line"></i> Learning Progress</h3>
+                    <div id="progress-items">
+                        <!-- Progress items will be loaded by JavaScript -->
+                    </div>
+                </div>
+                <div class="progress-card">
+                    <h3><i class="fas fa-trophy"></i> Achievements</h3>
+                    <div class="achievements" id="achievements-container">
+                        <!-- Achievements will be loaded by JavaScript -->
+                    </div>
+                    <h3 style="margin-top: 30px;"><i class="fas fa-star"></i> Recent Ratings</h3>
+                    <div id="recent-ratings">
+                        <!-- Recent ratings will be loaded by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Your SkillSwap Dashboard</h2>
+                <p>Manage your learning, teaching, and connections in one place.</p>
+            </div>
+            <div class="dashboard-grid">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="dashboard-nav active" data-target="dashboard-home"><i class="fas fa-home"></i> Dashboard</a></li>
+                        <li><a href="#" class="dashboard-nav" data-target="profile"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="#" class="dashboard-nav" data-target="my-skills"><i class="fas fa-book"></i> My Skills</a></li>
+                        <li><a href="#" class="dashboard-nav" data-target="schedule"><i class="fas fa-calendar"></i> Schedule</a></li>
+                        <li><a href="#" class="dashboard-nav" data-target="messages"><i class="fas fa-comments"></i> Messages</a></li>
+                        <li><a href="#" class="dashboard-nav" data-target="progress-dash"><i class="fas fa-chart-line"></i> Progress</a></li>
+                        <li><a href="#" class="dashboard-nav" data-target="settings"><i class="fas fa-cog"></i> Settings</a></li>
+                    </ul>
+                </div>
+                <div class="main-content">
+                    <!-- Dashboard Home -->
+                    <div class="dashboard-content active" id="dashboard-home">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <i class="fas fa-handshake"></i>
+                                <h3 id="connections-count">0</h3>
+                                <p>Connections</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-video"></i>
+                                <h3 id="sessions-count">0</h3>
+                                <p>Sessions Completed</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-clock"></i>
+                                <h3 id="hours-count">0</h3>
+                                <p>Hours Learned</p>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-award"></i>
+                                <h3 id="skills-count">0</h3>
+                                <p>Skills Mastered</p>
+                            </div>
+                        </div>
+                        <h3>Your Connections</h3>
+                        <div class="sessions-list" id="connections-list">
+                            <div class="session-item">
+                                <div class="session-info">
+                                    <h4>No connections yet</h4>
+                                    <p>Connect with tutors to start learning!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div class="dashboard-content" id="profile">
+                        <h3>Your Profile</h3>
+                        <p>Manage your personal information and preferences.</p>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" class="form-control" id="profile-name" placeholder="Your full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="profile-email" placeholder="Your email">
+                        </div>
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <textarea class="form-control" id="profile-bio" rows="4" placeholder="Tell others about yourself"></textarea>
+                        </div>
+                        <button class="btn btn-primary" id="save-profile">Save Changes</button>
+                    </div>
+
+                    <!-- My Skills Section -->
+                    <div class="dashboard-content" id="my-skills">
+                        <h3>My Skills</h3>
+                        <p>View and manage the skills you're learning and teaching.</p>
+                        <div id="learning-skills">
+                            <h4>Skills I'm Learning</h4>
+                            <div id="learning-skills-list"></div>
+                        </div>
+                        <div id="teaching-skills" style="margin-top: 20px;">
+                            <h4>Skills I'm Teaching</h4>
+                            <div id="teaching-skills-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Schedule Section -->
+                    <div class="dashboard-content" id="schedule">
+                        <h3>Schedule</h3>
+                        <p>View and manage your upcoming sessions.</p>
+                        <div id="dashboard-sessions">
+                            <!-- Sessions will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Messages Section -->
+                    <div class="dashboard-content" id="messages">
+                        <h3>Messages</h3>
+                        <p>Communicate with your skill partners.</p>
+                        <div id="messages-list">
+                            <div class="message-item">
+                                <div class="message-sender">Alex Johnson</div>
+                                <div class="message-preview">Hi! I'm available for a guitar lesson tomorrow...</div>
+                                <div class="message-time">2 hours ago</div>
+                            </div>
+                            <div class="message-item">
+                                <div class="message-sender">Maria Garcia</div>
+                                <div class="message-preview">Thanks for the Spanish lesson! When can we schedule the next one?</div>
+                                <div class="message-time">1 day ago</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Section -->
+                    <div class="dashboard-content" id="progress-dash">
+                        <h3>Your Progress</h3>
+                        <p>Track your learning journey and achievements.</p>
+                        <div id="dashboard-progress">
+                            <!-- Progress will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div class="dashboard-content" id="settings">
+                        <h3>Settings</h3>
+                        <p>Customize your SkillSwap experience.</p>
+                        <div class="form-group">
+                            <label>Notification Preferences</label>
+                            <div>
+                                <input type="checkbox" id="email-notifications" checked>
+                                <label for="email-notifications">Email notifications</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="session-reminders" checked>
+                                <label for="session-reminders">Session reminders</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Privacy Settings</label>
+                            <div>
+                                <input type="radio" id="privacy-public" name="privacy" checked>
+                                <label for="privacy-public">Public profile</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="privacy-private" name="privacy">
+                                <label for="privacy-private">Private profile</label>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="save-settings">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scheduler Section -->
+    <section class="scheduler" id="scheduler">
+        <div class="container">
+            <div class="section-title">
+                <h2>Schedule Your Skill Sessions</h2>
+                <p>Coordinate availability and set up learning sessions with your skill partners.</p>
+            </div>
+            <div class="scheduler-container">
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="current-month">June 2023</h3>
+                        <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-dates">
+                        <!-- Calendar will be loaded by JavaScript -->
+                    </div>
+                    <div class="time-slots" id="time-slots-container">
+                        <!-- Time slots will be loaded by JavaScript -->
+                    </div>
+                    <button class="btn btn-primary" id="schedule-btn" style="width: 100%; margin-top: 20px;">Schedule Session</button>
+                    <button class="btn btn-outline" id="export-calendar" style="width: 100%; margin-top: 10px;">
+                        <i class="fas fa-calendar-plus"></i> Export to Calendar
+                    </button>
+                </div>
+                <div class="sessions-list">
+                    <h3>Upcoming Sessions</h3>
+                    <div id="sessions-container">
+                        <!-- Sessions will be loaded by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Section -->
+    <section class="scheduler">
+        <div class="container">
+            <div class="section-title">
+                <h2>Set Your Availability</h2>
+                <p>Let others know when you're available for skill exchange sessions.</p>
+            </div>
+            <div class="status-selector">
+                <div class="status-option status-available-option active">
+                    <div class="user-status status-available"></div>
+                    Available
+                </div>
+                <div class="status-option status-busy-option">
+                    <div class="user-status status-busy"></div>
+                    Busy
+                </div>
+                <div class="status-option status-away-option">
+                    <div class="user-status status-away"></div>
+                    Away
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Log In</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" placeholder="Enter your email" id="login-email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" placeholder="Enter your password" id="login-password">
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" id="login-submit">Log In</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <p>Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sign Up</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-control" placeholder="Enter your full name" id="signup-name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" placeholder="Enter your email" id="signup-email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" placeholder="Create a password" id="signup-password">
+                </div>
+                <div class="form-group">
+                    <label>I want to join as:</label>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <div style="flex: 1; text-align: center; padding: 15px; border: 2px solid #ddd; border-radius: var(--radius); cursor: pointer;" class="role-option" data-role="student">
+                            <i class="fas fa-user-graduate" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                            <div>Student</div>
+                            <small>Learn new skills</small>
+                        </div>
+                        <div style="flex: 1; text-align: center; padding: 15px; border: 2px solid #ddd; border-radius: var(--radius); cursor: pointer;" class="role-option" data-role="teacher">
+                            <i class="fas fa-chalkboard-teacher" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+                            <div>Teacher</div>
+                            <small>Share your expertise</small>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" id="signup-submit">Create Account</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <p>Already have an account? <a href="#" id="show-login">Log in</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Call Modal -->
+    <div class="modal" id="video-call-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Video Call - <span id="call-partner">Alex</span></h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="video-container">
+                <div class="video-feed">
+                    <i class="fas fa-user" style="font-size: 50px;"></i>
+                    <p>Your Video</p>
+                    <div class="user-status status-available" style="margin-top: 10px;"></div>
+                    <p>You (Available)</p>
+                </div>
+                <div class="video-feed">
+                    <i class="fas fa-user" style="font-size: 50px;"></i>
+                    <p id="partner-name">Alex's Video</p>
+                    <div class="user-status status-available" style="margin-top: 10px;"></div>
+                    <p id="partner-status">Alex (Available)</p>
+                </div>
+            </div>
+            <div class="video-controls">
+                <button class="control-btn" id="mute-btn"><i class="fas fa-microphone"></i></button>
+                <button class="control-btn" id="video-btn"><i class="fas fa-video"></i></button>
+                <button class="control-btn" id="screen-btn"><i class="fas fa-desktop"></i></button>
+                <button class="control-btn end-call" id="end-call-btn"><i class="fas fa-phone"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal" id="rating-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Rate Your Session</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>How would you rate this session?</label>
+                    <div style="display: flex; gap: 5px; margin: 10px 0;">
+                        <i class="fas fa-star rating-star" data-rating="1" style="font-size: 24px; color: #ddd; cursor: pointer;"></i>
+                        <i class="fas fa-star rating-star" data-rating="2" style="font-size: 24px; color: #ddd; cursor: pointer;"></i>
+                        <i class="fas fa-star rating-star" data-rating="3" style="font-size: 24px; color: #ddd; cursor: pointer;"></i>
+                        <i class="fas fa-star rating-star" data-rating="4" style="font-size: 24px; color: #ddd; cursor: pointer;"></i>
+                        <i class="fas fa-star rating-star" data-rating="5" style="font-size: 24px; color: #ddd; cursor: pointer;"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="progress-percentage">Progress Percentage (0-100%)</label>
+                    <input type="number" id="progress-percentage" class="form-control" min="0" max="100" placeholder="Enter progress percentage">
+                </div>
+                <div class="form-group">
+                    <label for="session-notes">Session Notes</label>
+                    <textarea id="session-notes" class="form-control" rows="3" placeholder="Take notes about what you learned..."></textarea>
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" id="submit-rating">Submit Rating</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" id="chatbot-toggle">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <h3>SkillSwap Assistant</h3>
+                <button id="minimize-chatbot"><i class="fas fa-minus"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    Hello! I'm your SkillSwap assistant. How can I help you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Type your message...">
+                <button id="send-message"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SkillSwap</h3>
+                    <p>Exchange skills, grow together, and build meaningful connections through mutual learning.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#skills">Browse Skills</a></li>
+                        <li><a href="#scheduler">Schedule</a></li>
+                        <li><a href="#progress">Progress</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to get updates on new features and skill exchange opportunities.</p>
+                    <div class="search-box" style="margin-top: 15px;">
+                        <input type="text" placeholder="Your email">
+                        <button><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 SkillSwap. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced SkillSwap Platform with User-Input Progress
+        
+        // User data and state
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('skillswap_users')) || [];
+        let userProgress = JSON.parse(localStorage.getItem('skillswap_progress')) || {};
+        let userRatings = JSON.parse(localStorage.getItem('skillswap_ratings')) || [];
+        let scheduledSessions = JSON.parse(localStorage.getItem('skillswap_sessions')) || [];
+        let userAchievements = JSON.parse(localStorage.getItem('skillswap_achievements')) || {};
+        let userConnections = JSON.parse(localStorage.getItem('skillswap_connections')) || {};
+        let userSkills = JSON.parse(localStorage.getItem('skillswap_user_skills')) || {};
+        let reminderInterval = null;
+        
+        // Enhanced skills data with levels
+        const skillsData = {
+            technology: [
+                { id: 1, name: "Web Development", icon: "fas fa-code", users: 245, rating: 4.8, status: "available", level: "intermediate" },
+                { id: 2, name: "Mobile App Development", icon: "fas fa-mobile-alt", users: 189, rating: 4.7, status: "available", level: "advanced" },
+                { id: 3, name: "Data Science", icon: "fas fa-chart-line", users: 167, rating: 4.6, status: "busy", level: "advanced" },
+                { id: 4, name: "UI/UX Design", icon: "fas fa-paint-brush", users: 203, rating: 4.8, status: "away", level: "intermediate" }
+            ],
+            creative: [
+                { id: 5, name: "Guitar Lessons", icon: "fas fa-guitar", users: 189, rating: 4.9, status: "available", level: "beginner" },
+                { id: 6, name: "Digital Art", icon: "fas fa-paint-brush", users: 134, rating: 4.6, status: "available", level: "intermediate" },
+                { id: 7, name: "Photography", icon: "fas fa-camera", users: 178, rating: 4.7, status: "busy", level: "advanced" },
+                { id: 8, name: "Creative Writing", icon: "fas fa-pen", users: 156, rating: 4.5, status: "away", level: "beginner" }
+            ],
+            languages: [
+                { id: 9, name: "Spanish Language", icon: "fas fa-language", users: 156, rating: 4.7, status: "available", level: "beginner" },
+                { id: 10, name: "French Language", icon: "fas fa-language", users: 123, rating: 4.6, status: "busy", level: "intermediate" },
+                { id: 11, name: "Japanese Language", icon: "fas fa-language", users: 98, rating: 4.8, status: "available", level: "advanced" }
+            ],
+            business: [
+                { id: 12, name: "Marketing Strategy", icon: "fas fa-bullhorn", users: 145, rating: 4.5, status: "available", level: "intermediate" },
+                { id: 13, name: "Financial Planning", icon: "fas fa-chart-pie", users: 112, rating: 4.7, status: "busy", level: "advanced" },
+                { id: 14, name: "Public Speaking", icon: "fas fa-microphone", users: 167, rating: 4.8, status: "away", level: "beginner" }
+            ],
+            lifestyle: [
+                { id: 15, name: "Cooking & Baking", icon: "fas fa-utensils", users: 203, rating: 4.8, status: "available", level: "beginner" },
+                { id: 16, name: "Fitness Training", icon: "fas fa-dumbbell", users: 178, rating: 4.7, status: "busy", level: "intermediate" },
+                { id: 17, name: "Yoga & Meditation", icon: "fas fa-spa", users: 145, rating: 4.9, status: "available", level: "beginner" },
+                { id: 18, name: "Gardening", icon: "fas fa-seedling", users: 98, rating: 4.6, status: "away", level: "intermediate" }
+            ]
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const savedUser = localStorage.getItem('skillswap_current_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUIForUser();
+            }
+            
+            // Load skills
+            displaySkills('all', 'all');
+            
+            // Initialize calendar
+            initializeCalendar();
+            
+            // Load sessions
+            displaySessions();
+            
+            // Load progress
+            loadUserProgress();
+            
+            // Load achievements
+            loadAchievements();
+            
+            // Load connections
+            loadConnections();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Initialize chatbot
+            initializeChatbot();
+            
+            // Initialize authentication
+            initializeAuth();
+            
+            // Initialize rating system
+            initializeRatingSystem();
+            
+            // Initialize dashboard navigation
+            initializeDashboardNavigation();
+            
+            // Start reminder system
+            startReminderSystem();
+        });
+
+        // Display skills based on category and level
+        function displaySkills(category, level) {
+            const container = document.getElementById('skills-container');
+            container.innerHTML = '';
+            
+            let skillsToShow = [];
+            
+            if (category === 'all') {
+                // Combine all skills
+                for (const cat in skillsData) {
+                    skillsToShow = skillsToShow.concat(skillsData[cat]);
+                }
+            } else {
+                skillsToShow = skillsData[category] || [];
+            }
+            
+            // Filter by level
+            if (level !== 'all') {
+                skillsToShow = skillsToShow.filter(skill => skill.level === level);
+            }
+            
+            skillsToShow.forEach(skill => {
+                const skillCard = document.createElement('div');
+                skillCard.className = 'skill-card';
+                
+                let statusClass = '';
+                if (skill.status === 'available') {
+                    statusClass = 'status-available';
+                } else if (skill.status === 'busy') {
+                    statusClass = 'status-busy';
+                } else if (skill.status === 'away') {
+                    statusClass = 'status-away';
+                }
+                
+                let levelClass = '';
+                if (skill.level === 'beginner') {
+                    levelClass = 'level-beginner';
+                } else if (skill.level === 'intermediate') {
+                    levelClass = 'level-intermediate';
+                } else if (skill.level === 'advanced') {
+                    levelClass = 'level-advanced';
+                }
+                
+                skillCard.innerHTML = `
+                    <div class="skill-image">
+                        <i class="${skill.icon}"></i>
+                        <div class="user-status ${statusClass}"></div>
+                        <div class="skill-level ${levelClass}">${skill.level.charAt(0).toUpperCase() + skill.level.slice(1)}</div>
+                    </div>
+                    <div class="skill-content">
+                        <h3>${skill.name}</h3>
+                        <p>Learn ${skill.name} from experienced community members.</p>
+                        <div class="skill-meta">
+                            <span><i class="fas fa-users"></i> ${skill.users} available</span>
+                            <span><i class="fas fa-star"></i> ${skill.rating}</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="connectToSkill('${skill.name}')">
+                            <i class="fas fa-handshake"></i> Connect
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(skillCard);
+            });
+        }
+
+        // Connect to a skill - AUTOMATICALLY CONNECT
+        function connectToSkill(skillName) {
+            if (!currentUser) {
+                alert('Please log in to connect with tutors');
+                document.getElementById('login-btn').click();
+                return;
+            }
+            
+            // Show connection status
+            showConnectionStatus(`Connecting to ${skillName}...`, false);
+            
+            // Simulate connection process
+            setTimeout(() => {
+                // Generate a random tutor name
+                const tutorNames = ['Alex Johnson', 'Maria Garcia', 'James Wilson', 'Sarah Chen', 'David Kim'];
+                const randomTutor = tutorNames[Math.floor(Math.random() * tutorNames.length)];
+                
+                // Add connection to user's connections
+                if (!userConnections[currentUser.id]) {
+                    userConnections[currentUser.id] = [];
+                }
+                
+                // Check if already connected to this skill
+                const existingConnection = userConnections[currentUser.id].find(
+                    conn => conn.skill === skillName
+                );
+                
+                if (!existingConnection) {
+                    const newConnection = {
+                        id: Date.now(),
+                        skill: skillName,
+                        tutor: randomTutor,
+                        date: new Date().toLocaleDateString(),
+                        status: 'connected'
+                    };
+                    
+                    userConnections[currentUser.id].push(newConnection);
+                    localStorage.setItem('skillswap_connections', JSON.stringify(userConnections));
+                    
+                    // Add to user's learning skills
+                    if (!userSkills[currentUser.id]) {
+                        userSkills[currentUser.id] = { learning: [], teaching: [] };
+                    }
+                    if (!userSkills[currentUser.id].learning.includes(skillName)) {
+                        userSkills[currentUser.id].learning.push(skillName);
+                        localStorage.setItem('skillswap_user_skills', JSON.stringify(userSkills));
+                    }
+                    
+                    // Initialize progress for this skill if not exists
+                    if (!userProgress[currentUser.id]) {
+                        userProgress[currentUser.id] = {};
+                    }
+                    if (!userProgress[currentUser.id][skillName]) {
+                        userProgress[currentUser.id][skillName] = 0;
+                        localStorage.setItem('skillswap_progress', JSON.stringify(userProgress));
+                    }
+                    
+                    // Show success message
+                    showConnectionStatus(`Successfully connected to ${randomTutor} for ${skillName}!`, true);
+                    
+                    // Update dashboard
+                    loadConnections();
+                    updateDashboardStats();
+                    loadUserSkills();
+                    
+                    // Show in chatbot
+                    const chatbotMessages = document.getElementById('chatbot-messages');
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'message bot-message';
+                    messageDiv.textContent = `Great! I've connected you with ${randomTutor} for ${skillName}. You can now schedule a session or send them a message.`;
+                    chatbotMessages.appendChild(messageDiv);
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                } else {
+                    showConnectionStatus(`You're already connected to ${existingConnection.tutor} for ${skillName}`, true);
+                }
+            }, 1500);
+        }
+
+        // Show connection status notification
+        function showConnectionStatus(message, isSuccess) {
+            const statusElement = document.getElementById('connection-status');
+            const messageElement = document.getElementById('connection-message');
+            
+            messageElement.textContent = message;
+            
+            if (isSuccess) {
+                statusElement.classList.remove('error');
+            } else {
+                statusElement.classList.add('error');
+            }
+            
+            statusElement.style.display = 'flex';
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load user connections
+        function loadConnections() {
+            const connectionsList = document.getElementById('connections-list');
+            connectionsList.innerHTML = '';
+            
+            if (!currentUser || !userConnections[currentUser.id] || userConnections[currentUser.id].length === 0) {
+                connectionsList.innerHTML = `
+                    <div class="session-item">
+                        <div class="session-info">
+                            <h4>No connections yet</h4>
+                            <p>Connect with tutors to start learning!</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            userConnections[currentUser.id].forEach(connection => {
+                const connectionElement = document.createElement('div');
+                connectionElement.className = 'session-item';
+                
+                connectionElement.innerHTML = `
+                    <div class="session-info">
+                        <h4>${connection.skill} with ${connection.tutor}</h4>
+                        <p>Connected on ${connection.date}</p>
+                        <div class="session-status status-completed">Connected</div>
+                    </div>
+                    <div class="session-actions">
+                        <button class="btn btn-primary" onclick="scheduleWithTutor('${connection.tutor}', '${connection.skill}')">
+                            <i class="fas fa-calendar"></i> Schedule
+                        </button>
+                        <button class="btn btn-outline" onclick="messageTutor('${connection.tutor}')">
+                            <i class="fas fa-comment"></i> Message
+                        </button>
+                    </div>
+                `;
+                
+                connectionsList.appendChild(connectionElement);
+            });
+        }
+
+        // Schedule with a tutor
+        function scheduleWithTutor(tutor, skill) {
+            if (!currentUser) return;
+            
+            // Navigate to scheduler
+            document.querySelector('nav a[href="#scheduler"]').click();
+            
+            // Show message in chatbot
+            const chatbotMessages = document.getElementById('chatbot-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            messageDiv.textContent = `I've opened the scheduler for you to book a session with ${tutor} for ${skill}.`;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        // Message a tutor
+        function messageTutor(tutor) {
+            if (!currentUser) return;
+            
+            alert(`Opening chat with ${tutor}. In a real application, this would open a messaging interface.`);
+        }
+
+        // Initialize calendar
+        function initializeCalendar() {
+            const currentMonthElement = document.getElementById('current-month');
+            const calendarDates = document.getElementById('calendar-dates');
+            const timeSlots = document.getElementById('time-slots-container');
+            const prevMonthBtn = document.getElementById('prev-month');
+            const nextMonthBtn = document.getElementById('next-month');
+            
+            let currentDate = new Date();
+            let selectedDate = null;
+            
+            // Render calendar
+            function renderCalendar() {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
+                
+                // Update month display
+                currentMonthElement.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+                
+                // Clear previous dates
+                calendarDates.innerHTML = '';
+                
+                // Add day headers
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                days.forEach(day => {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day';
+                    dayElement.textContent = day;
+                    calendarDates.appendChild(dayElement);
+                });
+                
+                // Get first day of month and number of days
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                // Add empty cells for days before the first day
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyCell = document.createElement('div');
+                    emptyCell.className = 'calendar-date';
+                    calendarDates.appendChild(emptyCell);
+                }
+                
+                // Add days of the month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateElement = document.createElement('div');
+                    dateElement.className = 'calendar-date';
+                    dateElement.textContent = day;
+                    
+                    // Get the date for this cell
+                    const cellDate = new Date(year, month, day);
+                    const today = new Date();
+                    
+                    // Mark today
+                    if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        dateElement.classList.add('selected');
+                        selectedDate = cellDate;
+                    }
+                    
+                    // Mark past dates as unavailable
+                    if (cellDate < today) {
+                        dateElement.classList.add('past');
+                    } else {
+                        // Randomly mark some dates as available/busy for demo
+                        if (Math.random() > 0.3) {
+                            dateElement.classList.add('available');
+                        } else {
+                            dateElement.classList.add('busy');
+                        }
+                    }
+                    
+                    dateElement.addEventListener('click', function() {
+                        if (this.classList.contains('past')) {
+                            alert('This date has already passed. Please select a future date.');
+                            return;
+                        }
+                        
+                        if (this.classList.contains('available')) {
+                            // Remove previous selection
+                            document.querySelectorAll('.calendar-date.selected').forEach(el => {
+                                el.classList.remove('selected');
+                            });
+                            
+                            this.classList.add('selected');
+                            selectedDate = cellDate;
+                            renderTimeSlots();
+                        } else {
+                            alert('This date is not available. Please select an available date.');
+                        }
+                    });
+                    
+                    calendarDates.appendChild(dateElement);
+                }
+                
+                renderTimeSlots();
+            }
+            
+            // Render time slots
+            function renderTimeSlots() {
+                timeSlots.innerHTML = '';
+                
+                const slots = ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
+                
+                slots.forEach(slot => {
+                    const slotElement = document.createElement('div');
+                    slotElement.className = 'time-slot';
+                    slotElement.textContent = slot;
+                    
+                    // If a date is selected and it's today, mark past time slots as unavailable
+                    if (selectedDate) {
+                        const today = new Date();
+                        if (selectedDate.toDateString() === today.toDateString()) {
+                            const slotHour = parseInt(slot.split(':')[0]);
+                            const isPM = slot.includes('PM');
+                            const currentHour = today.getHours();
+                            
+                            // Convert to 24-hour format for comparison
+                            let slotHour24 = slotHour;
+                            if (isPM && slotHour !== 12) slotHour24 += 12;
+                            if (!isPM && slotHour === 12) slotHour24 = 0;
+                            
+                            if (slotHour24 < currentHour) {
+                                slotElement.classList.add('past');
+                            }
+                        }
+                    }
+                    
+                    // Randomly mark some slots as busy for demo (only if not already past)
+                    if (!slotElement.classList.contains('past') && Math.random() > 0.6) {
+                        slotElement.classList.add('busy');
+                    }
+                    
+                    slotElement.addEventListener('click', function() {
+                        if (this.classList.contains('past')) {
+                            alert('This time slot has already passed. Please select a future time.');
+                            return;
+                        }
+                        
+                        if (!this.classList.contains('busy')) {
+                            // Remove previous selection
+                            document.querySelectorAll('.time-slot.selected').forEach(el => {
+                                el.classList.remove('selected');
+                            });
+                            
+                            this.classList.add('selected');
+                        } else {
+                            alert('This time slot is not available. Please select an available time.');
+                        }
+                    });
+                    
+                    timeSlots.appendChild(slotElement);
+                });
+            }
+            
+            // Month navigation
+            prevMonthBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+            
+            nextMonthBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+            
+            // Schedule button
+            document.getElementById('schedule-btn').addEventListener('click', function() {
+                if (!currentUser) {
+                    alert('Please log in to schedule a session');
+                    document.getElementById('login-btn').click();
+                    return;
+                }
+                
+                const selectedTime = document.querySelector('.time-slot.selected');
+                
+                if (!selectedDate) {
+                    alert('Please select a date');
+                    return;
+                }
+                
+                if (!selectedTime) {
+                    alert('Please select a time');
+                    return;
+                }
+                
+                const formattedDate = selectedDate.toLocaleDateString();
+                alert(`Session scheduled for ${formattedDate} at ${selectedTime.textContent}`);
+                
+                // Add to sessions list - FIXED: Set status to "upcoming" not "completed"
+                const newSession = {
+                    id: Date.now(),
+                    skill: "New Session",
+                    partner: "Skill Partner", 
+                    date: formattedDate,
+                    time: selectedTime.textContent,
+                    duration: "1 hour",
+                    status: "upcoming"  // This was the fix - changed from "completed" to "upcoming"
+                };
+                
+                scheduledSessions.push(newSession);
+                localStorage.setItem('skillswap_sessions', JSON.stringify(scheduledSessions));
+                displaySessions();
+                loadDashboardSessions();
+                
+                // Update stats
+                updateDashboardStats();
+                
+                // Show confirmation in chatbot
+                const chatbotMessages = document.getElementById('chatbot-messages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot-message';
+                messageDiv.textContent = `Your session has been scheduled for ${formattedDate} at ${selectedTime.textContent}. I'll remind you 30 minutes before.`;
+                chatbotMessages.appendChild(messageDiv);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            });
+            
+            // Export calendar
+            document.getElementById('export-calendar').addEventListener('click', function() {
+                alert('Your sessions have been exported to your calendar. In a real application, this would integrate with Google Calendar, Outlook, etc.');
+            });
+            
+            // Initial render
+            renderCalendar();
+        }
+
+        // Display sessions
+        function displaySessions() {
+            const container = document.getElementById('sessions-container');
+            container.innerHTML = '';
+            
+            // Use scheduled sessions or sample data
+            let sessionsToDisplay = scheduledSessions.length > 0 ? scheduledSessions : [
+                { 
+                    id: 1,
+                    skill: "Web Development", 
+                    partner: "Alex", 
+                    date: "2023-06-10", 
+                    time: "15:00", 
+                    duration: "1.5 hours",
+                    status: "completed"
+                },
+                { 
+                    id: 2,
+                    skill: "Spanish Language", 
+                    partner: "Maria", 
+                    date: "2023-06-08", 
+                    time: "10:00", 
+                    duration: "1 hour",
+                    status: "completed"
+                },
+                { 
+                    id: 3,
+                    skill: "Guitar Lessons", 
+                    partner: "John", 
+                    date: "2023-06-15", 
+                    time: "17:00", 
+                    duration: "1 hour",
+                    status: "upcoming"
+                }
+            ];
+            
+            // Update session status based on current date - FIXED: Only mark as completed if date has passed
+            const today = new Date();
+            sessionsToDisplay = sessionsToDisplay.map(session => {
+                const sessionDate = new Date(session.date);
+                // Only mark as completed if the session date has passed AND it was previously upcoming
+                if (sessionDate < today && session.status === "upcoming") {
+                    session.status = "completed";
+                }
+                return session;
+            });
+            
+            // Save updated sessions
+            scheduledSessions = sessionsToDisplay;
+            localStorage.setItem('skillswap_sessions', JSON.stringify(scheduledSessions));
+            
+            if (sessionsToDisplay.length === 0) {
+                container.innerHTML = '<p>No upcoming sessions. Schedule one now!</p>';
+                return;
+            }
+            
+            // Sort sessions by date (upcoming first, then completed)
+            sessionsToDisplay.sort((a, b) => {
+                if (a.status === "upcoming" && b.status === "completed") return -1;
+                if (a.status === "completed" && b.status === "upcoming") return 1;
+                return new Date(a.date) - new Date(b.date);
+            });
+            
+            sessionsToDisplay.forEach(session => {
+                const sessionElement = document.createElement('div');
+                sessionElement.className = 'session-item';
+                
+                const statusClass = session.status === "completed" ? "status-completed" : "status-upcoming";
+                const statusText = session.status === "completed" ? "Completed" : "Upcoming";
+                
+                sessionElement.innerHTML = `
+                    <div class="session-info">
+                        <h4>${session.skill} with ${session.partner}</h4>
+                        <p>${session.date}, ${session.time} - ${session.duration}</p>
+                        <div class="session-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="session-actions">
+                        ${session.status === "upcoming" ? 
+                            `<button class="btn btn-primary" onclick="startVideoCall('${session.partner}', '${session.skill}')">
+                                <i class="fas fa-video"></i> Join
+                            </button>` : 
+                            `<button class="btn btn-outline" onclick="rateSession(${session.id})">
+                                <i class="fas fa-star"></i> Rate
+                            </button>`
+                        }
+                        <button class="btn btn-outline" onclick="addToCalendar('${session.skill}', '${session.date}', '${session.time}')">
+                            <i class="fas fa-calendar-plus"></i>
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(sessionElement);
+            });
+        }
+
+        // Start video call
+        function startVideoCall(partner, skill) {
+            if (!currentUser) {
+                alert('Please log in to start a video call');
+                document.getElementById('login-btn').click();
+                return;
+            }
+            
+            const modal = document.getElementById('video-call-modal');
+            document.getElementById('call-partner').textContent = partner;
+            document.getElementById('partner-name').textContent = `${partner}'s Video`;
+            document.getElementById('partner-status').textContent = `${partner} (Available)`;
+            
+            modal.style.display = 'flex';
+            
+            // Set up video controls
+            const muteBtn = document.getElementById('mute-btn');
+            const videoBtn = document.getElementById('video-btn');
+            const endCallBtn = document.getElementById('end-call-btn');
+            
+            let isMuted = false;
+            let isVideoOn = true;
+            
+            muteBtn.addEventListener('click', function() {
+                isMuted = !isMuted;
+                muteBtn.innerHTML = isMuted ? '<i class="fas fa-microphone-slash"></i>' : '<i class="fas fa-microphone"></i>';
+                alert(isMuted ? 'Microphone muted' : 'Microphone unmuted');
+            });
+            
+            videoBtn.addEventListener('click', function() {
+                isVideoOn = !isVideoOn;
+                videoBtn.innerHTML = isVideoOn ? '<i class="fas fa-video"></i>' : '<i class="fas fa-video-slash"></i>';
+                alert(isVideoOn ? 'Video turned on' : 'Video turned off');
+            });
+            
+            // Set up end call button
+            endCallBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                alert('Call ended');
+                
+                // Mark session as completed
+                const sessionId = scheduledSessions.find(s => 
+                    s.partner === partner && s.skill === skill && s.status === "upcoming"
+                )?.id;
+                
+                if (sessionId) {
+                    const sessionIndex = scheduledSessions.findIndex(s => s.id === sessionId);
+                    if (sessionIndex !== -1) {
+                        scheduledSessions[sessionIndex].status = "completed";
+                        localStorage.setItem('skillswap_sessions', JSON.stringify(scheduledSessions));
+                        displaySessions();
+                        loadDashboardSessions();
+                        
+                        // Update stats
+                        updateDashboardStats();
+                        
+                        // Update achievements
+                        updateAchievements();
+                    }
+                }
+                
+                // Show rating modal
+                setTimeout(function() {
+                    document.getElementById('rating-modal').style.display = 'flex';
+                }, 500);
+            });
+        }
+
+        // Rate a session
+        function rateSession(sessionId) {
+            if (!currentUser) {
+                alert('Please log in to rate a session');
+                document.getElementById('login-btn').click();
+                return;
+            }
+            
+            document.getElementById('rating-modal').style.display = 'flex';
+            
+            // Set up rating stars
+            const stars = document.querySelectorAll('.rating-star');
+            let selectedRating = 0;
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.getAttribute('data-rating'));
+                    
+                    // Update star display
+                    stars.forEach(s => {
+                        const rating = parseInt(s.getAttribute('data-rating'));
+                        s.style.color = rating <= selectedRating ? 'var(--warning)' : '#ddd';
+                    });
+                });
+            });
+            
+            // Submit rating
+            document.getElementById('submit-rating').addEventListener('click', function() {
+                if (selectedRating === 0) {
+                    alert('Please select a rating');
+                    return;
+                }
+                
+                const progressPercentage = document.getElementById('progress-percentage').value;
+                const sessionNotes = document.getElementById('session-notes').value;
+                
+                // Create rating object
+                const rating = {
+                    id: Date.now(),
+                    userId: currentUser.id,
+                    sessionId: sessionId,
+                    stars: selectedRating,
+                    progress: progressPercentage || 0,
+                    notes: sessionNotes,
+                    date: new Date().toLocaleDateString()
+                };
+                
+                // Add to ratings
+                userRatings.push(rating);
+                localStorage.setItem('skillswap_ratings', JSON.stringify(userRatings));
+                
+                // Update user progress
+                if (!userProgress[currentUser.id]) {
+                    userProgress[currentUser.id] = {};
+                }
+                
+                // Find the session to get the skill
+                const session = scheduledSessions.find(s => s.id === sessionId);
+                if (session) {
+                    userProgress[currentUser.id][session.skill] = parseInt(progressPercentage) || 0;
+                    localStorage.setItem('skillswap_progress', JSON.stringify(userProgress));
+                }
+                
+                alert('Thank you for your rating!');
+                document.getElementById('rating-modal').style.display = 'none';
+                
+                // Reset form
+                stars.forEach(s => s.style.color = '#ddd');
+                document.getElementById('progress-percentage').value = '';
+                document.getElementById('session-notes').value = '';
+                
+                // Reload progress
+                loadUserProgress();
+                loadDashboardProgress();
+                
+                // Update achievements
+                updateAchievements();
+            });
+        }
+
+        // Add to calendar
+        function addToCalendar(skill, date, time) {
+            alert(`Added ${skill} session on ${date} at ${time} to your calendar`);
+        }
+
+        // Load user progress - MODIFIED to include user input
+        function loadUserProgress() {
+            const progressItems = document.getElementById('progress-items');
+            progressItems.innerHTML = '';
+            
+            // Get user's progress or initialize if doesn't exist
+            if (currentUser && !userProgress[currentUser.id]) {
+                userProgress[currentUser.id] = {};
+            }
+            
+            const userSkills = currentUser ? (userProgress[currentUser.id] || {}) : {};
+            
+            // If no progress yet, show default skills with 0% progress
+            if (Object.keys(userSkills).length === 0) {
+                userSkills['Web Development'] = 0;
+                userSkills['Spanish Language'] = 0;
+                userSkills['Guitar Playing'] = 0;
+                userSkills['Cooking'] = 0;
+            }
+            
+            // Display progress for each skill with input field
+            for (const [skill, progress] of Object.entries(userSkills)) {
+                const progressItem = document.createElement('div');
+                progressItem.className = 'progress-item';
+                progressItem.innerHTML = `
+                    <div class="progress-info">
+                        <span>${skill}</span>
+                        <span>${progress}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="progress-input-container">
+                        <input type="number" class="progress-input" min="0" max="100" value="${progress}" id="progress-input-${skill}">
+                        <button class="progress-input-btn" onclick="updateProgress('${skill}')">Update</button>
+                    </div>
+                `;
+                progressItems.appendChild(progressItem);
+            }
+            
+            // Load recent ratings
+            loadRecentRatings();
+        }
+        
+        // Update progress for a skill
+        function updateProgress(skillName) {
+            if (!currentUser) return;
+            
+            const inputElement = document.getElementById(`progress-input-${skillName}`);
+            const newProgress = parseInt(inputElement.value);
+            
+            if (isNaN(newProgress) || newProgress < 0 || newProgress > 100) {
+                alert('Please enter a valid progress value between 0 and 100');
+                return;
+            }
+            
+            // Update progress in storage
+            userProgress[currentUser.id][skillName] = newProgress;
+            localStorage.setItem('skillswap_progress', JSON.stringify(userProgress));
+            
+            // Show success message
+            showConnectionStatus(`Progress for ${skillName} updated to ${newProgress}%`, true);
+            
+            // Reload progress display
+            loadUserProgress();
+            loadDashboardProgress();
+            
+            // Update achievements
+            updateAchievements();
+            
+            // Update stats
+            updateDashboardStats();
+        }
+        
+        // Load recent ratings
+        function loadRecentRatings() {
+            const recentRatings = document.getElementById('recent-ratings');
+            recentRatings.innerHTML = '';
+            
+            // Get user's ratings
+            const userRatingsList = currentUser ? userRatings.filter(r => r.userId === currentUser.id) : [];
+            
+            // Show recent ratings or message if none
+            if (userRatingsList.length === 0) {
+                recentRatings.innerHTML = '<p>No ratings yet. Complete a session to get rated!</p>';
+            } else {
+                // Show last 3 ratings
+                const recent = userRatingsList.slice(-3).reverse();
+                
+                recent.forEach(rating => {
+                    const ratingItem = document.createElement('div');
+                    ratingItem.className = 'progress-item';
+                    
+                    // Create star rating display
+                    let starsHtml = '';
+                    for (let i = 1; i <= 5; i++) {
+                        starsHtml += `<i class="fas fa-star" style="color: ${i <= rating.stars ? 'var(--warning)' : '#ddd'};"></i>`;
+                    }
+                    
+                    ratingItem.innerHTML = `
+                        <div class="progress-info">
+                            <span>${getSkillFromSession(rating.sessionId)}</span>
+                            <span>${rating.progress}%</span>
+                        </div>
+                        <div class="rating-stars">
+                            ${starsHtml}
+                        </div>
+                        <div style="font-size: 12px; color: var(--secondary); margin-top: 5px;">
+                            ${rating.date}
+                        </div>
+                    `;
+                    recentRatings.appendChild(ratingItem);
+                });
+            }
+        }
+        
+        // Helper function to get skill name from session ID
+        function getSkillFromSession(sessionId) {
+            const session = scheduledSessions.find(s => s.id === sessionId);
+            return session ? session.skill : "Unknown Skill";
+        }
+
+        // Load achievements
+        function loadAchievements() {
+            const achievementsContainer = document.getElementById('achievements-container');
+            achievementsContainer.innerHTML = '';
+            
+            // Initialize achievements if not exists
+            if (currentUser && !userAchievements[currentUser.id]) {
+                userAchievements[currentUser.id] = {
+                    firstSession: false,
+                    fiveSessions: false,
+                    skillMaster: false,
+                    communityHelper: false
+                };
+                localStorage.setItem('skillswap_achievements', JSON.stringify(userAchievements));
+            }
+            
+            const userAchievementsList = currentUser ? userAchievements[currentUser.id] : {};
+            
+            const achievements = [
+                { id: 'firstSession', name: 'First Session', icon: 'fas fa-medal', unlocked: userAchievementsList.firstSession || false },
+                { id: 'fiveSessions', name: '5 Sessions', icon: 'fas fa-medal', unlocked: userAchievementsList.fiveSessions || false },
+                { id: 'skillMaster', name: 'Skill Master', icon: 'fas fa-medal', unlocked: userAchievementsList.skillMaster || false },
+                { id: 'communityHelper', name: 'Community Helper', icon: 'fas fa-medal', unlocked: userAchievementsList.communityHelper || false }
+            ];
+            
+            achievements.forEach(achievement => {
+                const achievementElement = document.createElement('div');
+                achievementElement.className = `achievement ${achievement.unlocked ? 'unlocked' : ''}`;
+                achievementElement.innerHTML = `
+                    <i class="${achievement.icon}"></i>
+                    <span>${achievement.name}</span>
+                `;
+                achievementsContainer.appendChild(achievementElement);
+            });
+        }
+        
+        // Update achievements based on user activity
+        function updateAchievements() {
+            if (!currentUser) return;
+            
+            // Initialize if not exists
+            if (!userAchievements[currentUser.id]) {
+                userAchievements[currentUser.id] = {
+                    firstSession: false,
+                    fiveSessions: false,
+                    skillMaster: false,
+                    communityHelper: false
+                };
+            }
+            
+            const userSessions = scheduledSessions.filter(s => s.status === "completed");
+            const userSkills = userProgress[currentUser.id] || {};
+            
+            // Check for achievements
+            if (userSessions.length >= 1 && !userAchievements[currentUser.id].firstSession) {
+                userAchievements[currentUser.id].firstSession = true;
+            }
+            
+            if (userSessions.length >= 5 && !userAchievements[currentUser.id].fiveSessions) {
+                userAchievements[currentUser.id].fiveSessions = true;
+            }
+            
+            // Check if any skill is at 80% or more
+            const masteredSkill = Object.values(userSkills).some(progress => progress >= 80);
+            if (masteredSkill && !userAchievements[currentUser.id].skillMaster) {
+                userAchievements[currentUser.id].skillMaster = true;
+            }
+            
+            // Community helper achievement (simplified for demo)
+            if (userSessions.length >= 3 && !userAchievements[currentUser.id].communityHelper) {
+                userAchievements[currentUser.id].communityHelper = true;
+            }
+            
+            // Save achievements
+            localStorage.setItem('skillswap_achievements', JSON.stringify(userAchievements));
+            
+            // Reload achievements display
+            loadAchievements();
+        }
+        
+        // Update dashboard statistics
+        function updateDashboardStats() {
+            if (!currentUser) return;
+            
+            const userSessions = scheduledSessions.filter(s => s.status === "completed");
+            const userSkills = userProgress[currentUser.id] || {};
+            const userConnectionsCount = userConnections[currentUser.id] ? userConnections[currentUser.id].length : 0;
+            
+            // Count mastered skills (80% or more progress)
+            const masteredSkills = Object.values(userSkills).filter(progress => progress >= 80).length;
+            
+            // Update stats
+            document.getElementById('connections-count').textContent = userConnectionsCount;
+            document.getElementById('sessions-count').textContent = userSessions.length;
+            document.getElementById('hours-count').textContent = userSessions.length; // Simplified for demo
+            document.getElementById('skills-count').textContent = masteredSkills;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Navigation
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Scroll to section
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Skill filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Handle category filters
+                    if (this.hasAttribute('data-category')) {
+                        filterButtons.forEach(btn => {
+                            if (btn.hasAttribute('data-category')) {
+                                btn.classList.remove('active');
+                            }
+                        });
+                        this.classList.add('active');
+                        const category = this.getAttribute('data-category');
+                        displaySkills(category, 'all');
+                    }
+                    
+                    // Handle level filters
+                    if (this.hasAttribute('data-level')) {
+                        filterButtons.forEach(btn => {
+                            if (btn.hasAttribute('data-level')) {
+                                btn.classList.remove('active');
+                            }
+                        });
+                        this.classList.add('active');
+                        const level = this.getAttribute('data-level');
+                        const activeCategory = document.querySelector('.filter-btn.active[data-category]');
+                        const category = activeCategory ? activeCategory.getAttribute('data-category') : 'all';
+                        displaySkills(category, level);
+                    }
+                });
+            });
+            
+            // Status selector
+            const statusOptions = document.querySelectorAll('.status-option');
+            statusOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (!currentUser) {
+                        alert('Please log in to set your status');
+                        document.getElementById('login-btn').click();
+                        return;
+                    }
+                    
+                    // Remove active class from all options
+                    statusOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // Update status
+                    const status = this.querySelector('.user-status').className.includes('available') ? 'available' : 
+                                  this.querySelector('.user-status').className.includes('busy') ? 'busy' : 'away';
+                    alert(`Status updated to: ${status}`);
+                    
+                    // Update all status indicators
+                    document.querySelectorAll('.user-status').forEach(indicator => {
+                        indicator.className = 'user-status';
+                        if (status === 'available') {
+                            indicator.classList.add('status-available');
+                        } else if (status === 'busy') {
+                            indicator.classList.add('status-busy');
+                        } else if (status === 'away') {
+                            indicator.classList.add('status-away');
+                        }
+                    });
+                });
+            });
+            
+            // Search functionality - FIXED
+            document.getElementById('search-btn').addEventListener('click', performSearch);
+            document.getElementById('skill-search').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+
+        // Initialize dashboard navigation
+        function initializeDashboardNavigation() {
+            const dashboardNavLinks = document.querySelectorAll('.dashboard-nav');
+            
+            dashboardNavLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    dashboardNavLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Get target content section
+                    const targetId = this.getAttribute('data-target');
+                    const targetContent = document.getElementById(targetId);
+                    
+                    // Hide all content sections
+                    document.querySelectorAll('.dashboard-content').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show target content section
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                        
+                        // Load specific content for each section
+                        switch(targetId) {
+                            case 'profile':
+                                loadProfile();
+                                break;
+                            case 'my-skills':
+                                loadUserSkills();
+                                break;
+                            case 'schedule':
+                                loadDashboardSessions();
+                                break;
+                            case 'progress-dash':
+                                loadDashboardProgress();
+                                break;
+                        }
+                    }
+                });
+            });
+        }
+
+        // Load profile data
+        function loadProfile() {
+            if (!currentUser) return;
+            
+            document.getElementById('profile-name').value = currentUser.name || '';
+            document.getElementById('profile-email').value = currentUser.email || '';
+            document.getElementById('profile-bio').value = currentUser.bio || '';
+            
+            // Save profile button
+            document.getElementById('save-profile').addEventListener('click', function() {
+                currentUser.name = document.getElementById('profile-name').value;
+                currentUser.bio = document.getElementById('profile-bio').value;
+                localStorage.setItem('skillswap_current_user', JSON.stringify(currentUser));
+                alert('Profile updated successfully!');
+            });
+        }
+
+        // Load user skills
+        function loadUserSkills() {
+            if (!currentUser) return;
+            
+            const learningList = document.getElementById('learning-skills-list');
+            const teachingList = document.getElementById('teaching-skills-list');
+            
+            learningList.innerHTML = '';
+            teachingList.innerHTML = '';
+            
+            if (!userSkills[currentUser.id]) {
+                userSkills[currentUser.id] = { learning: [], teaching: [] };
+            }
+            
+            // Display learning skills
+            if (userSkills[currentUser.id].learning.length === 0) {
+                learningList.innerHTML = '<p>You are not learning any skills yet. Connect with tutors to start learning!</p>';
+            } else {
+                userSkills[currentUser.id].learning.forEach(skill => {
+                    const skillItem = document.createElement('div');
+                    skillItem.className = 'skill-item';
+                    skillItem.innerHTML = `
+                        <div class="skill-info">
+                            <h5>${skill}</h5>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${userProgress[currentUser.id]?.[skill] || 0}%"></div>
+                            </div>
+                            <span>${userProgress[currentUser.id]?.[skill] || 0}% complete</span>
+                            <div class="progress-input-container">
+                                <input type="number" class="progress-input" min="0" max="100" value="${userProgress[currentUser.id]?.[skill] || 0}" id="dashboard-progress-input-${skill}">
+                                <button class="progress-input-btn" onclick="updateProgress('${skill}')">Update</button>
+                            </div>
+                        </div>
+                    `;
+                    learningList.appendChild(skillItem);
+                });
+            }
+            
+            // Display teaching skills
+            if (userSkills[currentUser.id].teaching.length === 0) {
+                teachingList.innerHTML = '<p>You are not teaching any skills yet. Add skills you can teach!</p>';
+            } else {
+                userSkills[currentUser.id].teaching.forEach(skill => {
+                    const skillItem = document.createElement('div');
+                    skillItem.className = 'skill-item';
+                    skillItem.innerHTML = `
+                        <div class="skill-info">
+                            <h5>${skill}</h5>
+                            <button class="btn btn-outline">Edit</button>
+                        </div>
+                    `;
+                    teachingList.appendChild(skillItem);
+                });
+            }
+        }
+
+        // Load dashboard sessions
+        function loadDashboardSessions() {
+            if (!currentUser) return;
+            
+            const dashboardSessions = document.getElementById('dashboard-sessions');
+            dashboardSessions.innerHTML = '';
+            
+            const userSessions = scheduledSessions.filter(s => 
+                s.status === "upcoming" || s.status === "completed"
+            );
+            
+            if (userSessions.length === 0) {
+                dashboardSessions.innerHTML = '<p>No sessions scheduled yet.</p>';
+                return;
+            }
+            
+            userSessions.forEach(session => {
+                const sessionElement = document.createElement('div');
+                sessionElement.className = 'session-item';
+                
+                const statusClass = session.status === "completed" ? "status-completed" : "status-upcoming";
+                const statusText = session.status === "completed" ? "Completed" : "Upcoming";
+                
+                sessionElement.innerHTML = `
+                    <div class="session-info">
+                        <h4>${session.skill} with ${session.partner}</h4>
+                        <p>${session.date}, ${session.time} - ${session.duration}</p>
+                        <div class="session-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="session-actions">
+                        ${session.status === "upcoming" ? 
+                            `<button class="btn btn-primary" onclick="startVideoCall('${session.partner}', '${session.skill}')">
+                                <i class="fas fa-video"></i> Join
+                            </button>` : 
+                            `<button class="btn btn-outline" onclick="rateSession(${session.id})">
+                                <i class="fas fa-star"></i> Rate
+                            </button>`
+                        }
+                    </div>
+                `;
+                
+                dashboardSessions.appendChild(sessionElement);
+            });
+        }
+
+        // Load dashboard progress - MODIFIED to include user input
+        function loadDashboardProgress() {
+            if (!currentUser) return;
+            
+            const dashboardProgress = document.getElementById('dashboard-progress');
+            dashboardProgress.innerHTML = '';
+            
+            const userProgressData = userProgress[currentUser.id] || {};
+            
+            if (Object.keys(userProgressData).length === 0) {
+                dashboardProgress.innerHTML = '<p>No progress data available yet.</p>';
+                return;
+            }
+            
+            for (const [skill, progress] of Object.entries(userProgressData)) {
+                const progressItem = document.createElement('div');
+                progressItem.className = 'progress-item';
+                progressItem.innerHTML = `
+                    <div class="progress-info">
+                        <span>${skill}</span>
+                        <span>${progress}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="progress-input-container">
+                        <input type="number" class="progress-input" min="0" max="100" value="${progress}" id="dashboard-progress-input-${skill}">
+                        <button class="progress-input-btn" onclick="updateProgress('${skill}')">Update</button>
+                    </div>
+                `;
+                dashboardProgress.appendChild(progressItem);
+            }
+        }
+
+        // Start reminder system
+        function startReminderSystem() {
+            // Clear any existing interval
+            if (reminderInterval) {
+                clearInterval(reminderInterval);
+            }
+            
+            // Check for upcoming sessions every minute
+            reminderInterval = setInterval(() => {
+                checkForUpcomingSessions();
+            }, 60000); // Check every minute
+            
+            // Also check immediately
+            checkForUpcomingSessions();
+        }
+
+        // Check for upcoming sessions and show reminders
+        function checkForUpcomingSessions() {
+            if (!currentUser) return;
+            
+            const now = new Date();
+            const upcomingSessions = scheduledSessions.filter(session => {
+                if (session.status !== "upcoming") return false;
+                
+                // Parse session date and time
+                const sessionDate = new Date(session.date);
+                const [time, modifier] = session.time.split(' ');
+                let [hours, minutes] = time.split(':');
+                
+                // Convert to 24-hour format
+                if (modifier === 'PM' && hours !== '12') {
+                    hours = parseInt(hours) + 12;
+                } else if (modifier === 'AM' && hours === '12') {
+                    hours = 0;
+                }
+                
+                // Create session datetime
+                const sessionDateTime = new Date(sessionDate);
+                sessionDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                
+                // Check if session is within the next 30 minutes
+                const timeDiff = sessionDateTime.getTime() - now.getTime();
+                return timeDiff > 0 && timeDiff <= 30 * 60 * 1000; // Within 30 minutes
+            });
+            
+            if (upcomingSessions.length > 0) {
+                showReminder(upcomingSessions[0]);
+            }
+        }
+
+        // Show reminder notification
+        function showReminder(session) {
+            const reminderElement = document.getElementById('reminder-notification');
+            const messageElement = document.getElementById('reminder-message');
+            
+            messageElement.textContent = `You have a ${session.skill} session with ${session.partner} at ${session.time}`;
+            
+            reminderElement.style.display = 'flex';
+            
+            // Hide after 10 seconds
+            setTimeout(() => {
+                reminderElement.style.display = 'none';
+            }, 10000);
+        }
+
+        // Perform search - FIXED: Now navigates to skills section
+        function performSearch() {
+            const searchTerm = document.getElementById('skill-search').value.toLowerCase();
+            
+            // Navigate to skills section
+            document.querySelector('nav a[href="#skills"]').click();
+            
+            if (searchTerm.trim() === '') {
+                displaySkills('all', 'all');
+                return;
+            }
+            
+            // Filter skills based on search term
+            let filteredSkills = [];
+            for (const category in skillsData) {
+                const categorySkills = skillsData[category].filter(skill => 
+                    skill.name.toLowerCase().includes(searchTerm)
+                );
+                filteredSkills = filteredSkills.concat(categorySkills);
+            }
+            
+            // Display filtered skills
+            const container = document.getElementById('skills-container');
+            container.innerHTML = '';
+            
+            if (filteredSkills.length === 0) {
+                container.innerHTML = '<p>No skills found matching your search. Try a different term.</p>';
+                return;
+            }
+            
+            filteredSkills.forEach(skill => {
+                const skillCard = document.createElement('div');
+                skillCard.className = 'skill-card';
+                
+                let statusClass = '';
+                if (skill.status === 'available') {
+                    statusClass = 'status-available';
+                } else if (skill.status === 'busy') {
+                    statusClass = 'status-busy';
+                } else if (skill.status === 'away') {
+                    statusClass = 'status-away';
+                }
+                
+                let levelClass = '';
+                if (skill.level === 'beginner') {
+                    levelClass = 'level-beginner';
+                } else if (skill.level === 'intermediate') {
+                    levelClass = 'level-intermediate';
+                } else if (skill.level === 'advanced') {
+                    levelClass = 'level-advanced';
+                }
+                
+                skillCard.innerHTML = `
+                    <div class="skill-image">
+                        <i class="${skill.icon}"></i>
+                        <div class="user-status ${statusClass}"></div>
+                        <div class="skill-level ${levelClass}">${skill.level.charAt(0).toUpperCase() + skill.level.slice(1)}</div>
+                    </div>
+                    <div class="skill-content">
+                        <h3>${skill.name}</h3>
+                        <p>Learn ${skill.name} from experienced community members.</p>
+                        <div class="skill-meta">
+                            <span><i class="fas fa-users"></i> ${skill.users} available</span>
+                            <span><i class="fas fa-star"></i> ${skill.rating}</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="connectToSkill('${skill.name}')">
+                            <i class="fas fa-handshake"></i> Connect
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(skillCard);
+            });
+        }
+
+        // Initialize chatbot
+        function initializeChatbot() {
+            const toggleBtn = document.getElementById('chatbot-toggle');
+            const chatbotWindow = document.getElementById('chatbot-window');
+            const minimizeBtn = document.getElementById('minimize-chatbot');
+            const sendBtn = document.getElementById('send-message');
+            const input = document.getElementById('chatbot-input');
+            
+            toggleBtn.addEventListener('click', function() {
+                chatbotWindow.style.display = chatbotWindow.style.display === 'flex' ? 'none' : 'flex';
+            });
+            
+            minimizeBtn.addEventListener('click', function() {
+                chatbotWindow.style.display = 'none';
+            });
+            
+            sendBtn.addEventListener('click', sendMessage);
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const message = input.value.trim();
+                if (message === '') return;
+                
+                // Add user message
+                const messagesContainer = document.getElementById('chatbot-messages');
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user-message';
+                userMessage.textContent = message;
+                messagesContainer.appendChild(userMessage);
+                
+                // Clear input
+                input.value = '';
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                // Simulate bot response
+                setTimeout(function() {
+                    const botMessage = document.createElement('div');
+                    botMessage.className = 'message bot-message';
+                    
+                    // Simple response logic
+                    if (message.toLowerCase().includes('hello') || message.toLowerCase().includes('hi')) {
+                        botMessage.textContent = 'Hello! How can I help you with SkillSwap today?';
+                    } else if (message.toLowerCase().includes('schedule') || message.toLowerCase().includes('session')) {
+                        botMessage.textContent = 'You can schedule a session by going to the Schedule section and selecting an available date and time.';
+                    } else if (message.toLowerCase().includes('skill') || message.toLowerCase().includes('learn')) {
+                        botMessage.textContent = 'Check out the Skills section to browse available skills you can learn or teach.';
+                    } else if (message.toLowerCase().includes('connect')) {
+                        botMessage.textContent = 'Click the "Connect" button on any skill card to automatically connect with a tutor for that skill.';
+                    } else if (message.toLowerCase().includes('progress')) {
+                        botMessage.textContent = 'You can update your learning progress in the Progress section or in your Dashboard. Just enter the percentage and click Update!';
+                    } else {
+                        botMessage.textContent = 'I understand you\'re asking about: "' + message + '". For more specific help, please contact our support team.';
+                    }
+                    
+                    messagesContainer.appendChild(botMessage);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        // Initialize authentication
+        function initializeAuth() {
+            const loginBtn = document.getElementById('login-btn');
+            const signupBtn = document.getElementById('signup-btn');
+            const loginModal = document.getElementById('login-modal');
+            const signupModal = document.getElementById('signup-modal');
+            const closeModals = document.querySelectorAll('.close-modal');
+            const showSignup = document.getElementById('show-signup');
+            const showLogin = document.getElementById('show-login');
+            const loginSubmit = document.getElementById('login-submit');
+            const signupSubmit = document.getElementById('signup-submit');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            // Open modals
+            loginBtn.addEventListener('click', function() {
+                loginModal.style.display = 'flex';
+            });
+            
+            signupBtn.addEventListener('click', function() {
+                signupModal.style.display = 'flex';
+            });
+            
+            // Close modals
+            closeModals.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    loginModal.style.display = 'none';
+                    signupModal.style.display = 'none';
+                    document.getElementById('video-call-modal').style.display = 'none';
+                    document.getElementById('rating-modal').style.display = 'none';
+                });
+            });
+            
+            // Switch between login and signup
+            showSignup.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginModal.style.display = 'none';
+                signupModal.style.display = 'flex';
+            });
+            
+            showLogin.addEventListener('click', function(e) {
+                e.preventDefault();
+                signupModal.style.display = 'none';
+                loginModal.style.display = 'flex';
+            });
+            
+            // Role selection in signup
+            const roleOptions = document.querySelectorAll('.role-option');
+            let selectedRole = 'student';
+            
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    roleOptions.forEach(opt => {
+                        opt.style.borderColor = '#ddd';
+                    });
+                    this.style.borderColor = 'var(--primary)';
+                    selectedRole = this.getAttribute('data-role');
+                });
+            });
+            
+            // Login submit
+            loginSubmit.addEventListener('click', function() {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                if (!email || !password) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                // Simple authentication (in a real app, this would be more secure)
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('skillswap_current_user', JSON.stringify(currentUser));
+                    updateUIForUser();
+                    loginModal.style.display = 'none';
+                    alert('Login successful!');
+                    
+                    // Update stats and achievements
+                    updateDashboardStats();
+                    updateAchievements();
+                    loadConnections();
+                    startReminderSystem();
+                } else {
+                    alert('Invalid email or password');
+                }
+            });
+            
+            // Signup submit
+            signupSubmit.addEventListener('click', function() {
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                
+                if (!name || !email || !password) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                // Check if user already exists
+                if (users.find(u => u.email === email)) {
+                    alert('User with this email already exists');
+                    return;
+                }
+                
+                // Create new user
+                const newUser = {
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    password: password,
+                    role: selectedRole,
+                    joinDate: new Date().toLocaleDateString()
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('skillswap_users', JSON.stringify(users));
+                
+                currentUser = newUser;
+                localStorage.setItem('skillswap_current_user', JSON.stringify(currentUser));
+                updateUIForUser();
+                signupModal.style.display = 'none';
+                alert('Account created successfully!');
+                
+                // Update stats and achievements
+                updateDashboardStats();
+                updateAchievements();
+                loadConnections();
+                startReminderSystem();
+            });
+            
+            // Logout
+            logoutBtn.addEventListener('click', function() {
+                currentUser = null;
+                localStorage.removeItem('skillswap_current_user');
+                updateUIForUser();
+                alert('You have been logged out');
+                
+                // Clear reminder interval
+                if (reminderInterval) {
+                    clearInterval(reminderInterval);
+                    reminderInterval = null;
+                }
+            });
+        }
+
+        // Initialize rating system
+        function initializeRatingSystem() {
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Update UI for logged in user
+        function updateUIForUser() {
+            const authButtons = document.getElementById('auth-buttons');
+            const userInfo = document.getElementById('user-info');
+            const dashboardLink = document.getElementById('dashboard-link');
+            const dashboardSection = document.getElementById('dashboard');
+            
+            if (currentUser) {
+                authButtons.style.display = 'none';
+                userInfo.style.display = 'flex';
+                dashboardLink.style.display = 'block';
+                dashboardSection.style.display = 'block';
+                
+                document.getElementById('user-name').textContent = currentUser.name;
+                document.getElementById('user-role').textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+                document.getElementById('user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+                
+                // Update stats and achievements
+                updateDashboardStats();
+                updateAchievements();
+                loadConnections();
+            } else {
+                authButtons.style.display = 'flex';
+                userInfo.style.display = 'none';
+                dashboardLink.style.display = 'none';
+                dashboardSection.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
